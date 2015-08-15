@@ -119,6 +119,7 @@ public class MultiCardViewPager extends ViewGroup {
      * If the app changes this when we don't expect it, we'll throw a big obnoxious exception.
      */
     private int mExpectedAdapterCount;
+    private boolean fling;
 
     static class ItemInfo {
         Object object;
@@ -1694,6 +1695,34 @@ public class MultiCardViewPager extends ViewGroup {
             return;
         }
 
+        if (fling) {
+            ItemInfo curInfo = infoForCurrentScrollPosition();
+
+
+//        final ItemInfo curInfo = infoForPosition(item);
+            int destX = 0;
+            if (curInfo != null) {
+                final int width = getClientWidth();
+                destX = (int) (width * Math.max(mFirstOffset,
+                        Math.min(curInfo.offset, mLastOffset)));
+            }
+            if (curInfo.position != 0 && curInfo.position != mAdapter.getCount() - 1) {
+                destX = destX - itemScrollOffset;
+            }
+//            smoothScrollTo(destX, 0, 100);
+            mScroller.startScroll(getScrollX(), getScrollY(), destX-getScrollX(), 0, 400);
+            ViewCompat.postInvalidateOnAnimation(this);
+//            dispatchOnPageSelected(curInfo.position);
+            fling = false;
+            return;
+        }
+
+
+//                scrollToItem(itemInfo.position, true, 100, true);
+//                setCurrentItemInternal(itemInfo.position, false, true, 100);
+//                setCurrentItem(itemInfo.position, true);
+//        fling = false;
+
         // Done with scroll, clean up state.
         completeScroll(true);
     }
@@ -2135,6 +2164,7 @@ public class MultiCardViewPager extends ViewGroup {
                             totalDelta);
 //                    setCurrentItemInternal(nextPage, true, true, initialVelocity);
 
+                    fling = true;
                     mScroller.fling(getScrollX(), getScrollY(), -initialVelocity, 0, 0, (int) (mAdapter.getCount() * getWidth() * 0.7F - getWidth()), getScrollY(), getScrollY());
 
                     mActivePointerId = INVALID_POINTER;
