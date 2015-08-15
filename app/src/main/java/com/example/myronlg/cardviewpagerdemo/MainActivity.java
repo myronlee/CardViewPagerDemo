@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
 //                    float scale = 1 - (1 - SCALE_DST)*positionOffset;
                     middle.setScaleX(scale);
                     middle.setScaleY(scale);
-                    ((CardView) middle).setDim((1 - scale)*3);
+                    ((CardView) middle).setDim((1 - scale)*4);
 
 //                    ImageView imageView = (ImageView) middle;
 //                    imageView.getDrawable().setColorFilter(Color.argb((int) (255 * (1 - scale)), 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
 
                     right.setScaleX(scale);
                     right.setScaleY(scale);
-                    ((CardView) right).setDim((1-scale)*3);
+                    ((CardView) right).setDim((1-scale)*4);
 //                    ImageView imageView = (ImageView) right;
 //                    imageView.getDrawable().setColorFilter(Color.argb((int) (255 * (1 - scale)), 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
 //                    imageView.invalidate();
@@ -143,7 +143,7 @@ public class MainActivity extends ActionBarActivity {
                 if (position != 0) {
                     cardView.setScaleX(SCALE_DST);
                     cardView.setScaleY(SCALE_DST);
-                    cardView.setDim((1-SCALE_DST)*3);
+                    cardView.setDim((1-SCALE_DST)*4);
                 }
 
                 cardView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {

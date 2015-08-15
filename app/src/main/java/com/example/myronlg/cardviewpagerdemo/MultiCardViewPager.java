@@ -585,7 +585,7 @@ public class MultiCardViewPager extends ViewGroup {
             destX = (int) (width * Math.max(mFirstOffset,
                     Math.min(curInfo.offset, mLastOffset)));
         }
-        if (item != 0 && item != mAdapter.getCount() - 1){
+        if (item != 0 && item != mAdapter.getCount() - 1) {
             destX = destX - itemScrollOffset;
         }
 /*
@@ -1699,8 +1699,14 @@ public class MultiCardViewPager extends ViewGroup {
             ItemInfo curInfo = infoForCurrentScrollPosition();
 
 
+            if (getScrollX() > (curInfo.offset + 0.35) * getWidth()) {
+                if (curInfo.position + 1 < mAdapter.getCount()) {
+                    curInfo = infoForPosition(curInfo.position + 1);
+                }
+            }
 //        final ItemInfo curInfo = infoForPosition(item);
             int destX = 0;
+
             if (curInfo != null) {
                 final int width = getClientWidth();
                 destX = (int) (width * Math.max(mFirstOffset,
@@ -1710,7 +1716,7 @@ public class MultiCardViewPager extends ViewGroup {
                 destX = destX - itemScrollOffset;
             }
 //            smoothScrollTo(destX, 0, 100);
-            mScroller.startScroll(getScrollX(), getScrollY(), destX-getScrollX(), 0, 400);
+            mScroller.startScroll(getScrollX(), getScrollY(), destX - getScrollX(), 0, 600);
             ViewCompat.postInvalidateOnAnimation(this);
 //            dispatchOnPageSelected(curInfo.position);
             fling = false;
