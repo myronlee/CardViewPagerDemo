@@ -1,6 +1,7 @@
 package com.example.myronlg.cardviewpagerdemo;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -67,6 +68,11 @@ public class MainActivity extends ActionBarActivity {
 //                    float scale = 1 - (1 - SCALE_DST)*positionOffset;
                     middle.setScaleX(scale);
                     middle.setScaleY(scale);
+                    ((CardView) middle).setDim((1 - scale)*3);
+
+//                    ImageView imageView = (ImageView) middle;
+//                    imageView.getDrawable().setColorFilter(Color.argb((int) (255 * (1 - scale)), 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
+//                    imageView.invalidate();
                 }
                 if (right != null) {
                     float scale;
@@ -78,6 +84,10 @@ public class MainActivity extends ActionBarActivity {
 
                     right.setScaleX(scale);
                     right.setScaleY(scale);
+                    ((CardView) right).setDim((1-scale)*3);
+//                    ImageView imageView = (ImageView) right;
+//                    imageView.getDrawable().setColorFilter(Color.argb((int) (255 * (1 - scale)), 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
+//                    imageView.invalidate();
                 }
             }
 
@@ -93,7 +103,7 @@ public class MainActivity extends ActionBarActivity {
 
             }
         });
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(20);
     }
 
     private class BeautyPagerAdapter extends PagerAdapter {
@@ -114,35 +124,40 @@ public class MainActivity extends ActionBarActivity {
             for (int position = 0; position < resId.length; position++) {
 
 //                final RoundedImageView imageView = new RoundedImageView(MainActivity.this);
-                final ImageView imageView = new ImageView(MainActivity.this);
-                imageView.setImageResource(resId[position]);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                final ImageView imageView = new ImageView(MainActivity.this);
+//                imageView.setImageResource(resId[position]);
+                final CardView cardView = new CardView(MainActivity.this);
+                cardView.setImage(resId[position]);
+
+                cardView.getImageView().setScaleType(ImageView.ScaleType.CENTER_CROP);
 //                imageView.setCornerRadius(20);
 
-                imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                cardView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
 //            textView.setText(datas[position]);
 //            textView.setBackgroundColor(colors[position]);
 //            textView.setGravity(Gravity.CENTER);
 
+//                imageView.getDrawable().setColorFilter(Color.argb((int) (255 * (1 - 0.5)), 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
 
                 if (position != 0) {
-                    imageView.setScaleX(SCALE_DST);
-                    imageView.setScaleY(SCALE_DST);
+                    cardView.setScaleX(SCALE_DST);
+                    cardView.setScaleY(SCALE_DST);
+                    cardView.setDim((1-SCALE_DST)*3);
                 }
 
-                imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                cardView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        imageView.setPivotX(imageView.getWidth() * 0.5F);
-                        imageView.setPivotY(imageView.getHeight() * 0.5F);
+                        cardView.setPivotX(cardView.getWidth() * 0.5F);
+                        cardView.setPivotY(cardView.getHeight() * 0.5F);
 
-                        imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        cardView.getViewTreeObserver().removeOnPreDrawListener(this);
                         return true;
                     }
                 });
-                imageView.setTag(position);
-                views.add(imageView);
+                cardView.setTag(position);
+                views.add(cardView);
             }
         }
 
@@ -206,6 +221,7 @@ public class MainActivity extends ActionBarActivity {
         public boolean isViewFromObject(View view, Object object) {
             return view == object;
         }
+
     }
 
     @Override

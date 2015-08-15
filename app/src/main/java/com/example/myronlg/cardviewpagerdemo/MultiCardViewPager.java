@@ -584,6 +584,10 @@ public class MultiCardViewPager extends ViewGroup {
             destX = (int) (width * Math.max(mFirstOffset,
                     Math.min(curInfo.offset, mLastOffset)));
         }
+        if (item != 0 && item != mAdapter.getCount() - 1){
+            destX = destX - itemScrollOffset;
+        }
+/*
 
         if (item == mAdapter.getCount() - 1) {
             destX = destX + itemScrollOffset;
@@ -591,6 +595,7 @@ public class MultiCardViewPager extends ViewGroup {
             destX = destX - itemScrollOffset;
         }
 
+*/
         if (smoothScroll) {
             smoothScrollTo(destX, 0, velocity);
             if (dispatchSelected) {
@@ -2130,7 +2135,7 @@ public class MultiCardViewPager extends ViewGroup {
                             totalDelta);
 //                    setCurrentItemInternal(nextPage, true, true, initialVelocity);
 
-                    mScroller.fling(getScrollX(), getScrollY(), -initialVelocity, 0, 0, (int) (mAdapter.getCount()  * getWidth() * 0.7F - getWidth()), getScrollY(), getScrollY());
+                    mScroller.fling(getScrollX(), getScrollY(), -initialVelocity, 0, 0, (int) (mAdapter.getCount() * getWidth() * 0.7F - getWidth()), getScrollY(), getScrollY());
 
                     mActivePointerId = INVALID_POINTER;
                     endDrag();
