@@ -1699,7 +1699,7 @@ public class MultiCardViewPager extends ViewGroup {
             ItemInfo curInfo = infoForCurrentScrollPosition();
 
 
-            if (getScrollX() > (curInfo.offset + 0.35) * getWidth()) {
+            if (getScrollX() > (curInfo.offset + 0.225) * getWidth()) {
                 if (curInfo.position + 1 < mAdapter.getCount()) {
                     curInfo = infoForPosition(curInfo.position + 1);
                 }
@@ -2166,12 +2166,15 @@ public class MultiCardViewPager extends ViewGroup {
                             MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                     final float x = MotionEventCompat.getX(ev, activePointerIndex);
                     final int totalDelta = (int) (x - mInitialMotionX);
-                    int nextPage = determineTargetPage(currentPage, pageOffset, initialVelocity,
-                            totalDelta);
-//                    setCurrentItemInternal(nextPage, true, true, initialVelocity);
-
-                    fling = true;
-                    mScroller.fling(getScrollX(), getScrollY(), -initialVelocity, 0, 0, (int) (mAdapter.getCount() * getWidth() * 0.7F - getWidth()), getScrollY(), getScrollY());
+                    if (Math.abs(initialVelocity) < 4000) {
+                        int nextPage = determineTargetPage(currentPage, pageOffset, initialVelocity,
+                                totalDelta);
+                        setCurrentItemInternal(nextPage, true, true, initialVelocity);
+                    } else {
+                        fling = true;
+//                        Log.e("Velocity", initialVelocity + "");
+                        mScroller.fling(getScrollX(), getScrollY(), -initialVelocity, 0, 0, (int) (mAdapter.getCount() * getWidth() * 0.7F - getWidth()), getScrollY(), getScrollY());
+                    }
 
                     mActivePointerId = INVALID_POINTER;
                     endDrag();

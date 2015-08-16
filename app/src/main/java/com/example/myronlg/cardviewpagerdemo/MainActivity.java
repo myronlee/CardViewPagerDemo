@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +97,7 @@ public class MainActivity extends ActionBarActivity {
 //                View currrentPage = viewPager.findViewWithTag(position);
 //                currrentPage.setScaleX(1);
 //                currrentPage.setScaleY(1);
+//                Toast.makeText(MainActivity.this, )
             }
 
             @Override
