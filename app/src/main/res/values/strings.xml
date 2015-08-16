@@ -18,4 +18,5 @@
         <item>RotateDown</item>
         <item>Accordion</item>
     </string-array>
+    <string name="title_activity_page_detail">PageDetailActivity</string>
 </resources>

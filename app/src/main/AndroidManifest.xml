@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name=".PageDetailActivity"
+            android:label="@string/title_activity_page_detail" >
+        </activity>
     </application>
 
 </manifest>

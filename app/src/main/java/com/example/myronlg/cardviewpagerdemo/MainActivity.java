@@ -1,5 +1,6 @@
 package com.example.myronlg.cardviewpagerdemo;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v4.view.PagerAdapter;
@@ -97,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
 //                View currrentPage = viewPager.findViewWithTag(position);
 //                currrentPage.setScaleX(1);
 //                currrentPage.setScaleY(1);
-                Toast.makeText(MainActivity.this, position+"", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, position+"", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -108,7 +109,7 @@ public class MainActivity extends ActionBarActivity {
         viewPager.setOffscreenPageLimit(20);
     }
 
-    private class BeautyPagerAdapter extends PagerAdapter {
+    private class BeautyPagerAdapter extends PagerAdapter implements View.OnClickListener {
 
         private String[] datas = {"1", "2", "3", "4", "5"};
         private int[] resId = {R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e, R.drawable.f, R.drawable.g, R.drawable.h, R.drawable.i, R.drawable.j, R.drawable.k, R.drawable.l, R.drawable.m};
@@ -159,6 +160,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
                 cardView.setTag(position);
+                cardView.setOnClickListener(this);
                 views.add(cardView);
             }
         }
@@ -224,6 +226,12 @@ public class MainActivity extends ActionBarActivity {
             return view == object;
         }
 
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, PageDetailActivity.class);
+            intent.putExtra("resId", resId[((int) view.getTag())]);
+            startActivity(intent);
+        }
     }
 
     @Override
