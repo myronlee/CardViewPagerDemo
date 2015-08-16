@@ -57,6 +57,9 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -120,6 +123,7 @@ public class MultiCardViewPager extends ViewGroup {
      */
     private int mExpectedAdapterCount;
     private boolean fling;
+    private Scroller myScroller;
 
     static class ItemInfo {
         Object object;
@@ -385,6 +389,8 @@ public class MultiCardViewPager extends ViewGroup {
         setFocusable(true);
         final Context context = getContext();
         mScroller = new Scroller(context, sInterpolator);
+
+        myScroller = new Scroller(context, new AccelerateInterpolator());
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         final float density = context.getResources().getDisplayMetrics().density;
 
@@ -1676,6 +1682,25 @@ public class MultiCardViewPager extends ViewGroup {
 
     @Override
     public void computeScroll() {
+        if (!myScroller.isFinished() && myScroller.computeScrollOffset()) {
+            int oldX = getScrollX();
+            int oldY = getScrollY();
+            int x = myScroller.getCurrX();
+            int y = myScroller.getCurrY();
+
+            if (oldX != x || oldY != y) {
+                scrollTo(x, y);
+                if (!pageScrolled(x)) {
+                    myScroller.abortAnimation();
+                    scrollTo(0, y);
+                }
+            }
+
+            // Keep on drawing until the animation has finished.
+            ViewCompat.postInvalidateOnAnimation(this);
+            return;
+        }
+        
         if (!mScroller.isFinished() && mScroller.computeScrollOffset()) {
             int oldX = getScrollX();
             int oldY = getScrollY();
@@ -1718,7 +1743,7 @@ public class MultiCardViewPager extends ViewGroup {
 //            smoothScrollTo(destX, 0, 100);
             mScroller.startScroll(getScrollX(), getScrollY(), destX - getScrollX(), 0, 600);
             ViewCompat.postInvalidateOnAnimation(this);
-//            dispatchOnPageSelected(curInfo.position);
+            dispatchOnPageSelected(curInfo.position);
             fling = false;
             return;
         }

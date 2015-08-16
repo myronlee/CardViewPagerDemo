@@ -97,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
 //                View currrentPage = viewPager.findViewWithTag(position);
 //                currrentPage.setScaleX(1);
 //                currrentPage.setScaleY(1);
-//                Toast.makeText(MainActivity.this, )
+                Toast.makeText(MainActivity.this, position+"", Toast.LENGTH_SHORT).show();
             }
 
             @Override
