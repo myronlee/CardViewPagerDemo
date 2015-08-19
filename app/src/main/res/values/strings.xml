@@ -19,4 +19,5 @@
         <item>Accordion</item>
     </string-array>
     <string name="title_activity_page_detail">PageDetailActivity</string>
+    <string name="title_activity_test_canvas_empty">TestCanvasEmptyActivity</string>
 </resources>

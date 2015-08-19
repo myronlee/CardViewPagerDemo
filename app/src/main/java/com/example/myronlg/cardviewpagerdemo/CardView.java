@@ -33,6 +33,7 @@ public class CardView extends FrameLayout {
     private void init() {
         dimView = new View(getContext());
         dimView.setBackgroundColor(Color.BLACK);
+        dimView.setAlpha(0);
         imageView = new ImageView(getContext());
         dimView.setLayerType(LAYER_TYPE_HARDWARE, null);
         imageView.setLayerType(LAYER_TYPE_HARDWARE, null);

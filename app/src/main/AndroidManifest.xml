@@ -17,9 +17,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name=".PageDetailActivity"
-            android:label="@string/title_activity_page_detail" >
+            android:label="@string/title_activity_page_detail"
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".TestCanvasEmptyActivity"
+            android:label="@string/title_activity_test_canvas_empty" >
         </activity>
     </application>
 

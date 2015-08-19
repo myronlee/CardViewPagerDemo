@@ -57,9 +57,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -124,6 +122,8 @@ public class MultiCardViewPager extends ViewGroup {
     private int mExpectedAdapterCount;
     private boolean fling;
     private Scroller myScroller;
+    private int maxScrollX;
+    private int minScrollX;
 
     static class ItemInfo {
         Object object;
@@ -379,7 +379,11 @@ public class MultiCardViewPager extends ViewGroup {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onGlobalLayout() {
-                itemScrollOffset = (int) (getClientWidth() * (1 - mAdapter.getPageWidth(0)) * 0.5F);
+                itemScrollOffset = (int) (getClientWidth() * mAdapter.getPageWidth(0));
+//                int maxScrollX = (int) (2*getClientWidth()*mAdapter.getPageWidth(0) + (mAdapter.getCount() - 2) * getClientWidth() * mAdapter.getPageWidth(1) - getWidth() + getClientWidth()*0.5F);
+                maxScrollX = (int) (getClientWidth()*(2*mAdapter.getPageWidth(0) + (mAdapter.getCount()-2)*mAdapter.getPageWidth(1) - 1 + 0.0F));
+                minScrollX = (int) (-getClientWidth()*0.0F);
+//                itemScrollOffset = 0;
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
@@ -591,7 +595,7 @@ public class MultiCardViewPager extends ViewGroup {
             destX = (int) (width * Math.max(mFirstOffset,
                     Math.min(curInfo.offset, mLastOffset)));
         }
-        if (item != 0 && item != mAdapter.getCount() - 1) {
+        if (item != 0 && item != mAdapter.getCount() - 2 && item != mAdapter.getCount() - 1) {
             destX = destX - itemScrollOffset;
         }
 /*
@@ -1700,7 +1704,7 @@ public class MultiCardViewPager extends ViewGroup {
             ViewCompat.postInvalidateOnAnimation(this);
             return;
         }
-        
+
         if (!mScroller.isFinished() && mScroller.computeScrollOffset()) {
             int oldX = getScrollX();
             int oldY = getScrollY();
@@ -1737,7 +1741,7 @@ public class MultiCardViewPager extends ViewGroup {
                 destX = (int) (width * Math.max(mFirstOffset,
                         Math.min(curInfo.offset, mLastOffset)));
             }
-            if (curInfo.position != 0 && curInfo.position != mAdapter.getCount() - 1) {
+            if (curInfo.position != 0 && curInfo.position != mAdapter.getCount() - 2 && curInfo.position != mAdapter.getCount() - 1) {
                 destX = destX - itemScrollOffset;
             }
 //            smoothScrollTo(destX, 0, 100);
@@ -2198,7 +2202,7 @@ public class MultiCardViewPager extends ViewGroup {
                     } else {
                         fling = true;
 //                        Log.e("Velocity", initialVelocity + "");
-                        mScroller.fling(getScrollX(), getScrollY(), -initialVelocity, 0, 0, (int) (mAdapter.getCount() * getWidth() * 0.7F - getWidth()), getScrollY(), getScrollY());
+                        mScroller.fling(getScrollX(), getScrollY(), -initialVelocity, 0, minScrollX, maxScrollX, getScrollY(), getScrollY());
                     }
 
                     mActivePointerId = INVALID_POINTER;
@@ -2338,7 +2342,8 @@ public class MultiCardViewPager extends ViewGroup {
         if (Math.abs(deltaX) > mFlingDistance && Math.abs(velocity) > mMinimumVelocity) {
             targetPage = velocity > 0 ? currentPage : currentPage + 1;
         } else {
-            final float truncator = currentPage >= mCurItem ? 0.4f : 0.6f;
+            final float truncator = currentPage >= mCurItem ? 0.8f : 0.6f;
+            Log.e("", pageOffset+"  "+truncator);
             targetPage = (int) (currentPage + pageOffset + truncator);
         }
 
